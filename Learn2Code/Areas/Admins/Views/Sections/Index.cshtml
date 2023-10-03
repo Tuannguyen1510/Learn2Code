@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Learn2Code.Models.Section>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admins/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Quản lý Nội dung bài học</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Create</a>
+</p>
+<form action="" method="get" class="form-inline" id="search-name">
+    <div class="form-group">
+        <label class="sr-only" for="keyword">Tìm theo tên loại</label>
+        <div class="">
+            <div class="input-group input-group-outline">
+                <label class="form-label">Nhập tên bạn muốn tìm...</label>
+                <input class="form-control" name="name" id="keyword" style="height:42px" />
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+<table class="table align-items-center mb-0" ">
+    <thead>
+        <tr>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                @Html.DisplayNameFor(model => model.IdlessionNavigation.IdcourseNavigation.IdcategoryNavigation.CategoryName)
+            </th>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                @Html.DisplayNameFor(model => model.IdlessionNavigation.IdcourseNavigation.CourseName)
+            </th>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                @Html.DisplayNameFor(model => model.IdlessionNavigation.Titel)
+            </th>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                @Html.DisplayNameFor(model => model.Titel)
+            </th>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                @Html.DisplayNameFor(model => model.TxtContent)
+            </th>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th class="text-secondary opacity-7"></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+             <td>
+
+                    <p class="text-xs font-weight-bold mb-0">@Html.DisplayFor(modelItem => item.IdlessionNavigation.IdcourseNavigation.IdcategoryNavigation.CategoryName)</p>
+
+             </td>
+             <td>
+
+                    <p class="text-xs font-weight-bold mb-0">@Html.DisplayFor(modelItem => item.IdlessionNavigation.IdcourseNavigation.CourseName)</p>
+
+             </td>
+            <td>
+
+                    <p class="text-xs font-weight-bold mb-0">@Html.DisplayFor(modelItem => item.IdlessionNavigation.Titel)</p>
+
+            </td>
+            <td>
+
+                    <p class="text-xs font-weight-bold mb-0">@Html.DisplayFor(modelItem => item.Titel)</p>
+
+            </td>
+            <td>
+
+                    <p class="text-xs font-weight-bold mb-0">@Html.DisplayFor(modelItem => item.TxtContent)</p>
+
+            </td>
+            <td>
+
+                    <p class="text-xs font-weight-bold mb-0">@Html.DisplayFor(modelItem => item.Image)</p>
+            </td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Idsection" class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="" data-original-title="Edit">
+                        <i class="fas fa-pencil-alt"></i>
+                    </a>
+                    <a asp-action="Details" asp-route-id="@item.Idsection" class="btn btn-info btn-action mr-1" data-toggle="tooltip" title="" data-original-title="Details">
+                        <i class="fas fa-clipboard-list"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Idsection" class="btn btn-danger btn-action" data-toggle="tooltip" title="" data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?" data-confirm-yes="alert('Deleted')" data-original-title="Delete">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+        </tr>
+}
+    </tbody>
+</table>

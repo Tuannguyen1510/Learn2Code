@@ -10,90 +10,90 @@ using Learn2Code.Models;
 namespace Learn2Code.Areas.Admins.Controllers
 {
     [Area("Admins")]
-    public class AdminProfileController : Controller
+    public class SectionsController : Controller
     {
         private readonly W3studyContext _context;
 
-       public AdminProfileController(W3studyContext context)
+        public SectionsController(W3studyContext context)
         {
             _context = context;
         }
 
-        // GET: Admins/AdminProfile
+        // GET: Admins/Sections
         public async Task<IActionResult> Index()
         {
-            var w3studyContext = _context.Admins.Include(a => a.IduserNavigation);
+            var w3studyContext = _context.Sections.Include(s => s.IdlessionNavigation).ThenInclude(s=> s.IdcourseNavigation).ThenInclude(s=>s.IdcategoryNavigation);
             return View(await w3studyContext.ToListAsync());
         }
 
-        // GET: Admins/AdminProfile/Details/5
+        // GET: Admins/Sections/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Admins == null)
+            if (id == null || _context.Sections == null)
             {
                 return NotFound();
             }
 
-            var admin = await _context.Admins
-                .Include(a => a.IduserNavigation)
-                .FirstOrDefaultAsync(m => m.Idadmin == id);
-            if (admin == null)
+            var section = await _context.Sections
+                .Include(s => s.IdlessionNavigation)
+                .FirstOrDefaultAsync(m => m.Idsection == id);
+            if (section == null)
             {
                 return NotFound();
             }
 
-            return View(admin);
+            return View(section);
         }
 
-        // GET: Admins/AdminProfile/Create
+        // GET: Admins/Sections/Create
         public IActionResult Create()
         {
-            ViewData["Iduser"] = new SelectList(_context.Users, "Iduser", "Iduser");
+            ViewData["Idlession"] = new SelectList(_context.Lessions, "Idlession", "Idlession");
             return View();
         }
 
-        // POST: Admins/AdminProfile/Create
+        // POST: Admins/Sections/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Idadmin,Iduser")] Admin admin)
+        public async Task<IActionResult> Create([Bind("Idsection,Idlession,Titel,TxtContent,Image")] Section section)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(admin);
+                _context.Add(section);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Iduser"] = new SelectList(_context.Users, "Iduser", "Iduser", admin.Iduser);
-            return View(admin);
+            ViewData["Idlession"] = new SelectList(_context.Lessions, "Idlession", "Idlession", section.Idlession);
+            return View(section);
         }
 
-        // GET: Admins/AdminProfile/Edit/5
+        // GET: Admins/Sections/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Admins == null)
+            if (id == null || _context.Sections == null)
             {
                 return NotFound();
             }
 
-            var admin = await _context.Admins.FindAsync(id);
-            if (admin == null)
+            var section = await _context.Sections.FindAsync(id);
+            if (section == null)
             {
                 return NotFound();
             }
-            ViewData["Iduser"] = new SelectList(_context.Users, "Iduser", "Iduser", admin.Iduser);
-            return View(admin);
+            ViewData["Idlession"] = new SelectList(_context.Lessions, "Idlession", "Idlession", section.Idlession);
+            return View(section);
         }
 
-        // POST: Admins/AdminProfile/Edit/5
+        // POST: Admins/Sections/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Idadmin,Iduser")] Admin admin)
+        public async Task<IActionResult> Edit(int id, [Bind("Idsection,Idlession,Titel,TxtContent,Image")] Section section)
         {
-            if (id != admin.Idadmin)
+            if (id != section.Idsection)
             {
                 return NotFound();
             }
@@ -102,12 +102,12 @@ namespace Learn2Code.Areas.Admins.Controllers
             {
                 try
                 {
-                    _context.Update(admin);
+                    _context.Update(section);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AdminExists(admin.Idadmin))
+                    if (!SectionExists(section.Idsection))
                     {
                         return NotFound();
                     }
@@ -118,51 +118,51 @@ namespace Learn2Code.Areas.Admins.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Iduser"] = new SelectList(_context.Users, "Iduser", "Iduser", admin.Iduser);
-            return View(admin);
+            ViewData["Idlession"] = new SelectList(_context.Lessions, "Idlession", "Idlession", section.Idlession);
+            return View(section);
         }
 
-        // GET: Admins/AdminProfile/Delete/5
+        // GET: Admins/Sections/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Admins == null)
+            if (id == null || _context.Sections == null)
             {
                 return NotFound();
             }
 
-            var admin = await _context.Admins
-                .Include(a => a.IduserNavigation)
-                .FirstOrDefaultAsync(m => m.Idadmin == id);
-            if (admin == null)
+            var section = await _context.Sections
+                .Include(s => s.IdlessionNavigation)
+                .FirstOrDefaultAsync(m => m.Idsection == id);
+            if (section == null)
             {
                 return NotFound();
             }
 
-            return View(admin);
+            return View(section);
         }
 
-        // POST: Admins/AdminProfile/Delete/5
+        // POST: Admins/Sections/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Admins == null)
+            if (_context.Sections == null)
             {
-                return Problem("Entity set 'W3studyContext.Admins'  is null.");
+                return Problem("Entity set 'W3studyContext.Sections'  is null.");
             }
-            var admin = await _context.Admins.FindAsync(id);
-            if (admin != null)
+            var section = await _context.Sections.FindAsync(id);
+            if (section != null)
             {
-                _context.Admins.Remove(admin);
+                _context.Sections.Remove(section);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AdminExists(int id)
+        private bool SectionExists(int id)
         {
-          return (_context.Admins?.Any(e => e.Idadmin == id)).GetValueOrDefault();
+          return _context.Sections.Any(e => e.Idsection == id);
         }
     }
 }

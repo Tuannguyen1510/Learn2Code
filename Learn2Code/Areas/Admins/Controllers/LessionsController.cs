@@ -10,90 +10,90 @@ using Learn2Code.Models;
 namespace Learn2Code.Areas.Admins.Controllers
 {
     [Area("Admins")]
-    public class AdminProfileController : Controller
+    public class LessionsController : Controller
     {
         private readonly W3studyContext _context;
 
-       public AdminProfileController(W3studyContext context)
+        public LessionsController(W3studyContext context)
         {
             _context = context;
         }
 
-        // GET: Admins/AdminProfile
+        // GET: Admins/Lessions
         public async Task<IActionResult> Index()
         {
-            var w3studyContext = _context.Admins.Include(a => a.IduserNavigation);
+            var w3studyContext = _context.Lessions.Include(l => l.IdcourseNavigation).ThenInclude(l=>l.IdcategoryNavigation);
             return View(await w3studyContext.ToListAsync());
         }
 
-        // GET: Admins/AdminProfile/Details/5
+        // GET: Admins/Lessions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Admins == null)
+            if (id == null || _context.Lessions == null)
             {
                 return NotFound();
             }
 
-            var admin = await _context.Admins
-                .Include(a => a.IduserNavigation)
-                .FirstOrDefaultAsync(m => m.Idadmin == id);
-            if (admin == null)
+            var lession = await _context.Lessions
+                .Include(l => l.IdcourseNavigation)
+                .FirstOrDefaultAsync(m => m.Idlession == id);
+            if (lession == null)
             {
                 return NotFound();
             }
 
-            return View(admin);
+            return View(lession);
         }
 
-        // GET: Admins/AdminProfile/Create
+        // GET: Admins/Lessions/Create
         public IActionResult Create()
         {
-            ViewData["Iduser"] = new SelectList(_context.Users, "Iduser", "Iduser");
+            ViewData["Idcourse"] = new SelectList(_context.Courses, "Idcourse", "Idcourse");
             return View();
         }
 
-        // POST: Admins/AdminProfile/Create
+        // POST: Admins/Lessions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Idadmin,Iduser")] Admin admin)
+        public async Task<IActionResult> Create([Bind("Idlession,Idcourse,Titel,LessionDesc,Sort")] Lession lession)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(admin);
+                _context.Add(lession);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Iduser"] = new SelectList(_context.Users, "Iduser", "Iduser", admin.Iduser);
-            return View(admin);
+            ViewData["Idcourse"] = new SelectList(_context.Courses, "Idcourse", "Idcourse", lession.Idcourse);
+            return View(lession);
         }
 
-        // GET: Admins/AdminProfile/Edit/5
+        // GET: Admins/Lessions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Admins == null)
+            if (id == null || _context.Lessions == null)
             {
                 return NotFound();
             }
 
-            var admin = await _context.Admins.FindAsync(id);
-            if (admin == null)
+            var lession = await _context.Lessions.FindAsync(id);
+            if (lession == null)
             {
                 return NotFound();
             }
-            ViewData["Iduser"] = new SelectList(_context.Users, "Iduser", "Iduser", admin.Iduser);
-            return View(admin);
+            ViewData["Idcourse"] = new SelectList(_context.Courses, "Idcourse", "Idcourse", lession.Idcourse);
+            return View(lession);
         }
 
-        // POST: Admins/AdminProfile/Edit/5
+        // POST: Admins/Lessions/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Idadmin,Iduser")] Admin admin)
+        public async Task<IActionResult> Edit(int id, [Bind("Idlession,Idcourse,Titel,LessionDesc,Sort")] Lession lession)
         {
-            if (id != admin.Idadmin)
+            if (id != lession.Idlession)
             {
                 return NotFound();
             }
@@ -102,12 +102,12 @@ namespace Learn2Code.Areas.Admins.Controllers
             {
                 try
                 {
-                    _context.Update(admin);
+                    _context.Update(lession);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AdminExists(admin.Idadmin))
+                    if (!LessionExists(lession.Idlession))
                     {
                         return NotFound();
                     }
@@ -118,51 +118,51 @@ namespace Learn2Code.Areas.Admins.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Iduser"] = new SelectList(_context.Users, "Iduser", "Iduser", admin.Iduser);
-            return View(admin);
+            ViewData["Idcourse"] = new SelectList(_context.Courses, "Idcourse", "Idcourse", lession.Idcourse);
+            return View(lession);
         }
 
-        // GET: Admins/AdminProfile/Delete/5
+        // GET: Admins/Lessions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Admins == null)
+            if (id == null || _context.Lessions == null)
             {
                 return NotFound();
             }
 
-            var admin = await _context.Admins
-                .Include(a => a.IduserNavigation)
-                .FirstOrDefaultAsync(m => m.Idadmin == id);
-            if (admin == null)
+            var lession = await _context.Lessions
+                .Include(l => l.IdcourseNavigation)
+                .FirstOrDefaultAsync(m => m.Idlession == id);
+            if (lession == null)
             {
                 return NotFound();
             }
 
-            return View(admin);
+            return View(lession);
         }
 
-        // POST: Admins/AdminProfile/Delete/5
+        // POST: Admins/Lessions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Admins == null)
+            if (_context.Lessions == null)
             {
-                return Problem("Entity set 'W3studyContext.Admins'  is null.");
+                return Problem("Entity set 'W3studyContext.Lessions'  is null.");
             }
-            var admin = await _context.Admins.FindAsync(id);
-            if (admin != null)
+            var lession = await _context.Lessions.FindAsync(id);
+            if (lession != null)
             {
-                _context.Admins.Remove(admin);
+                _context.Lessions.Remove(lession);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AdminExists(int id)
+        private bool LessionExists(int id)
         {
-          return (_context.Admins?.Any(e => e.Idadmin == id)).GetValueOrDefault();
+          return _context.Lessions.Any(e => e.Idlession == id);
         }
     }
 }

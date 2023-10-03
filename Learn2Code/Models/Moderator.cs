@@ -9,5 +9,5 @@ public partial class Moderator
 
     public int? Iduser { get; set; }
 
-    public virtual User? IduserNavigation { get; set; }
+    public virtual User IduserNavigation { get; set; }
 }
