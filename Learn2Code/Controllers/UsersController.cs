@@ -6,11 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Learn2Code.Models;
-using X.PagedList;
 
-namespace Learn2Code.Areas.Admins.Controllers
+namespace Learn2Code.Controllers
 {
-    [Area("Admins")]
     public class UsersController : Controller
     {
         private readonly W3studyContext _context;
@@ -20,32 +18,16 @@ namespace Learn2Code.Areas.Admins.Controllers
             _context = context;
         }
 
-        // GET: Admins/Users
-        public async Task<IActionResult> Index(string? name, int page = 1)
+        // GET: Users
+        public async Task<IActionResult> Index()
         {
-            //  var a = await _context.Accounts.ToListAsync();
-            // nếu có tham số name trên url
-            //  if (!String.IsNullOrEmpty(name))
-            //  {
-            //      a = await _context.Accounts.Where(c => c.FullName.Contains(name)).ToListAsync();
-            //  }
+           // var w3studyContext = _context.Users.Include(u => u.IdroleNavigation);
+          //  return View(await w3studyContext.ToListAsync());
 
-            int limit = 5;
-
-
-            var a = await _context.Users.OrderBy(c => c.UserName).ToPagedListAsync(page, limit);
-
-            if (!String.IsNullOrEmpty(name))
-            {
-                a = await _context.Users.Where(c => c.UserName.Contains(name)).OrderBy(c => c.Iduser).ToPagedListAsync(page, limit);
-            }
-
-
-            ViewBag.keyword = name;
-            return View(a);
+            return RedirectToAction("Index", "Home");
         }
 
-        // GET: Admins/Users/Details/5
+        // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Users == null)
@@ -64,14 +46,17 @@ namespace Learn2Code.Areas.Admins.Controllers
             return View(user);
         }
 
-        // GET: Admins/Users/Create
+        // GET: Users/Create
         public IActionResult Create()
         {
             ViewData["Idrole"] = new SelectList(_context.Roles, "Idrole", "Idrole");
+
+
+           // return RedirectToAction("Index", "Home");
             return View();
         }
 
-        // POST: Admins/Users/Create
+        // POST: Users/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -80,34 +65,15 @@ namespace Learn2Code.Areas.Admins.Controllers
         {
             if (ModelState.IsValid)
             {
-                var files = HttpContext.Request.Form.Files;
-                if (files.Count() > 0 && files[0].Length > 0)
-                {
-                    var file = files[0];
-                     var FileName = file.FileName;
-                    //var FileName = Convert.ToString(user.Iduser);
-                    // upload ảnh vào thư mục wwwroot\\images\\Category var path = Path.Combine(Directory.GetCurrentDirectory(),
-                    
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\user", FileName);
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                        user.Avatar = "/images/user/" + FileName; // gán tên
-                    }
-
-                }
-
-
-                // account.CreatedDate = DateTime.Now;
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-
             }
+            ViewData["Idrole"] = new SelectList(_context.Roles, "Idrole", "Idrole", user.Idrole);
             return View(user);
         }
 
-        // GET: Admins/Users/Edit/5
+        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Users == null)
@@ -124,7 +90,7 @@ namespace Learn2Code.Areas.Admins.Controllers
             return View(user);
         }
 
-        // POST: Admins/Users/Edit/5
+        // POST: Users/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -160,7 +126,7 @@ namespace Learn2Code.Areas.Admins.Controllers
             return View(user);
         }
 
-        // GET: Admins/Users/Delete/5
+        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Users == null)
@@ -179,7 +145,7 @@ namespace Learn2Code.Areas.Admins.Controllers
             return View(user);
         }
 
-        // POST: Admins/Users/Delete/5
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -200,7 +166,7 @@ namespace Learn2Code.Areas.Admins.Controllers
 
         private bool UserExists(int id)
         {
-          return (_context.Users?.Any(e => e.Iduser == id)).GetValueOrDefault();
+          return _context.Users.Any(e => e.Iduser == id);
         }
     }
 }

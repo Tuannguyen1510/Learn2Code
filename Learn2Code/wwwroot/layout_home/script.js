@@ -61,7 +61,7 @@ const renderDataTopLangHTML = dataTopLang
           </div>
           <div class="boxing-example box-margin">
             <p>${item.name} Example</p>
-            <img src="~/layout_home/img/lang/${item.filePath}"/>
+            <img src="./layout_home/img/lang/${item.filePath}"/>
           </div>
          </div>
       </div>

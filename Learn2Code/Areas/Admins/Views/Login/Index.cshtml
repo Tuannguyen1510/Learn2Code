@@ -1,4 +1,4 @@
-﻿
+﻿@model Learn2Code.Areas.Admins.Models.Login
 @{
     Layout = null;
 }
@@ -32,21 +32,37 @@
 
                     <div class="signin-form">
                         <h2 class="form-title">Đăng nhập</h2>
-                        <form method="POST" class="register-form" id="login-form">
+                        <form asp-action="Index" method="post">
                             <div class="form-group">
-                                <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="text" name="your_name" id="your_name" placeholder="Nhập username của bạn" />
+                                <div class="input-group mb-3">
+                                    <input type="email" class="form-control" asp-for="Email" placeholder="Email...">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-envelope"></span>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="Email"></span>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
-                                <input type="password" name="your_pass" id="your_pass" placeholder="Nhập password của bạn" />
+                                <div class="input-group mb-3">
+                                    <input type="password" class="form-control" asp-for="Password" placeholder="Password...">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-lock"></span>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="Password"></span>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
                                 <label for="remember-me" class="label-agree-term"><span><span></span></span>Lưu mật khẩu</label>
                             </div>
-                            <div class="form-group form-button">
-                                <input type="submit" name="signin" id="signin" class="form-submit" value="Log in" />
+                            <div class="row">
+                                <div class="col-4">
+                                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                                </div>
                             </div>
                         </form>
                         <div class="social-login">

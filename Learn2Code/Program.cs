@@ -9,6 +9,23 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("BookStoreString");
 builder.Services.AddDbContext<W3studyContext>(options => options.UseSqlServer(connectionString));
 
+// C?u hình s? d?ng session
+builder.Services.AddDistributedMemoryCache();
+
+
+// ?k d?ch v? cho HttpContextAccessor 
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.Name = ".Devs.Session";
+});
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,6 +42,10 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+
+// SD session ? trên 
+app.UseSession();
 
 app.MapControllerRoute(
           name: "areas",
